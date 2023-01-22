@@ -1,33 +1,33 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 pragma solidity ^0.8.4;
 
-import "./interfaces/IPunkTLDFactory.sol";
+import "./interfaces/IthirdyTLDFactory.sol";
 import "../../lib/strings.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "base64-sol/base64.sol";
 
-/// @title Punk Domains TLD contract (v2)
-/// @author Tempe Techie
+/// @title Thirdy Domain Registry TLD contract
+/// @author Punk Domains https://punk.domains
 /// @notice Dynamically generated NFT contract which represents a top-level domain
-contract PunkTLD is ERC721, Ownable, ReentrancyGuard {
+contract ThirdyTLD is ERC721, Ownable, ReentrancyGuard {
   using strings for string;
 
   uint256 public price; // domain price
   bool public buyingEnabled; // buying domains enabled
-  address public factoryAddress; // PunkTLDFactory address
-  uint256 public royalty; // share of each domain purchase (in bips) that goes to Punk Domains
+  address public factoryAddress; // ThirdyTLDFactory address
+  uint256 public royalty; // share of each domain purchase (in bips) that goes to Thirdy Domains
   uint256 public referral = 1000; // share of each domain purchase (in bips) that goes to the referrer (referral fee)
   uint256 public totalSupply;
   uint256 public nameMaxLength = 140; // max length of a domain name
-  string public description = "Punk Domains digital identity. Visit https://punk.domains/";
+  string public description = "Thirdy TLD and domains digital identity. Visit https://thirdy.xyz/";
 
   struct Domain {
-    string name; // domain name that goes before the TLD name; example: "tempetechie" in "tempetechie.web3"
+    string name; // domain name that goes before the TLD name; example: "yourname" in "yourname.thirdy"
     uint256 tokenId;
     address holder;
-    string data; // stringified JSON object, example: {"description": "Some text", "twitter": "@techie1239", "friends": ["0x123..."], "url": "https://punk.domains"}
+    string data; // stringified JSON object, example: {"description": "Some text", "twitter": "@thirdyxyz", "friends": ["0x123..."], "url": "https://thirdy.xyz"}
   }
   
   mapping (string => Domain) public domains; // mapping (domain name => Domain struct)
@@ -76,7 +76,7 @@ contract PunkTLD is ERC721, Ownable, ReentrancyGuard {
   }
 
   function tokenURI(uint256 _tokenId) public view override returns (string memory) {
-    IPunkTLDFactory factory = IPunkTLDFactory(factoryAddress);
+    IthirdyTLDFactory factory = IthirdyTLDFactory(factoryAddress);
     string memory fullDomainName = string(abi.encodePacked(domains[domainIdsNames[_tokenId]].name, name()));
 
     return string(
@@ -235,7 +235,7 @@ contract PunkTLD is ERC721, Ownable, ReentrancyGuard {
     emit DomainBuyingToggle(msg.sender, buyingEnabled);
   }
   
-  // FACTORY OWNER (current owner address of PunkTLDFactory)
+  // FACTORY OWNER (current owner address of ThirdyTLDFactory)
 
   /// @notice Only Factory contract owner can call this function.
   function changeRoyalty(uint256 _royalty) external {
