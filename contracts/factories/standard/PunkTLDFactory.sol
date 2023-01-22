@@ -4,16 +4,16 @@ pragma solidity ^0.8.4;
 import "../../lib/strings.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "./PunkTLD.sol";
+import "./ThirdyTLD.sol";
 import "../../interfaces/IPunkForbiddenTlds.sol";
 
-/// @title Punk Domains TLD Factory contract (v2)
-/// @author Tempe Techie
+/// @title Thirdy Domain Registry TLD Factory contract
+/// @author Punk Domains  https://punk.domains 
 /// @notice Factory contract dynamically generates new TLD contracts.
-contract PunkTLDFactory is Ownable, ReentrancyGuard {
+contract ThirdyTLDFactory is Ownable, ReentrancyGuard {
   using strings for string;
 
-  string public projectName = "punk.domains";
+  string public projectName = "thirdy.xyz";
 
   string[] public tlds; // existing TLDs
   mapping (string => address) public tldNamesAddresses; // a mapping of TLDs (string => TLDaddress)
@@ -21,8 +21,8 @@ contract PunkTLDFactory is Ownable, ReentrancyGuard {
   address public forbiddenTlds; // address of the contract that stores the list of forbidden TLDs
   
   uint256 public price; // price for creating a new TLD
-  uint256 public royalty = 0; // royalty for Punk Domains when new domain is minted 
-  bool public buyingEnabled = false; // buying TLDs enabled (true/false)
+  uint256 public royalty = 0; // royalty for Thirdy when new domain is minted 
+  bool public buyingEnabled = true; // buying TLDs enabled (true/false)
   uint256 public nameMaxLength = 40; // the maximum length of a TLD name
 
   event TldCreated(address indexed user, address indexed owner, string tldName, address tldAddress);
@@ -90,7 +90,7 @@ contract PunkTLDFactory is Ownable, ReentrancyGuard {
 
     _validTldName(_name);
 
-    PunkTLD tld = new PunkTLD(
+    ThirdyTLD tld = new ThirdyTLD(
       _name, 
       _symbol, 
       _tldOwner, 
